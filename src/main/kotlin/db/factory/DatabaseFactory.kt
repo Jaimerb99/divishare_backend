@@ -28,7 +28,7 @@ object DatabaseFactory {
         Database.connect(HikariDataSource(config))
 
         transaction {
-            SchemaUtils.create(
+            SchemaUtils.createMissingTablesAndColumns(
                 UsersTable,
                 GroupsTable,
                 GroupMembersTable,

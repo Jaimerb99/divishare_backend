@@ -10,6 +10,7 @@ object UsersTable : Table("users") {
     val name = varchar("name", 100)
     val avatarUrl = varchar("avatar_url", 500).nullable()
     val authProvider = varchar("auth_provider", 20)
+    val refreshToken = varchar("refresh_token", 512).nullable()
 
     override val primaryKey = PrimaryKey(id)
 }

@@ -29,5 +29,13 @@ data class LoginRequest(
 data class AuthResponse(
     val success: Boolean,
     val message: String,
-    val token: String? = null
+    val token: String? = null,
+    val refreshToken: String? = null
+)
+
+// Request sent by the client to get a new JWT
+@Serializable
+data class RefreshTokenRequest(
+    val email: String,
+    val refreshToken: String
 )

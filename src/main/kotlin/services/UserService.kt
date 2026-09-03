@@ -6,6 +6,7 @@ import com.jrb.models.LoginRequest
 import com.jrb.models.RegisterRequest
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.update
 import org.mindrot.jbcrypt.BCrypt
 
 class UserService {
@@ -39,7 +40,6 @@ class UserService {
                 insertStatement.insertedCount > 0
             }
         } catch (e: Exception) {
-            // In a real production environment, you should log the error here
             // e.g., logger.error("Error inserting user: ${e.message}")
             false
         }
@@ -64,6 +64,32 @@ class UserService {
 
                 // 3. Verify the plain text password against the hashed one
                 BCrypt.checkpw(request.password, storedHash)
+            }
+        } catch (e: Exception) {
+            false
+        }
+    }
+
+    // UPDATE: Save the refresh token in the database
+    suspend fun saveRefreshToken(email: String, token: String) {
+        dbQuery {
+            UsersTable.update({ UsersTable.email eq email }) {
+                it[refreshToken] = token
+            }
+        }
+    }
+
+    // READ: Validate if the refresh token matches the one stored in the database
+    suspend fun validateRefreshToken(email: String, token: String): Boolean {
+        return try {
+            dbQuery {
+                val userRow = UsersTable
+                    .select { UsersTable.email eq email }
+                    .singleOrNull()
+
+                // Extract the stored token and compare it
+                val storedToken = userRow?.get(UsersTable.refreshToken)
+                storedToken != null && storedToken == token
             }
         } catch (e: Exception) {
             false
