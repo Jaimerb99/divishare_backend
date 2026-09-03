@@ -27,6 +27,34 @@ object Constants {
         const val JWT_SECRET = "divishare-super-secret-key-2026"
         const val JWT_ISSUER = "http://localhost:8080/"
         const val JWT_AUDIENCE = "divishare-users"
-        const val JWT_EXPIRATION_MS = 86400000L // 24 hours in milliseconds        900_000L // 15 minutes
+        const val JWT_EXPIRATION_MS = 900_000L // 15 minutes
+    }
+
+    // Auth related constants
+    object Auth {
+        const val PROVIDER_LOCAL = "LOCAL"
+    }
+
+    // Logging tags and messages
+    object Logging {
+        const val GLOBAL_TAG = "DivishareBackend"
+        const val USER_SERVICE_TAG = "UserService"
+
+        object LogMessages {
+            const val REGISTRATION_EMAIL_EXISTS = "Registration attempt failed: Email already exists -> %s"
+            const val REGISTRATION_SUCCESS = "User successfully registered -> %s"
+            const val REGISTRATION_ERROR = "Critical database error while registering user: %s"
+
+            const val LOGIN_USER_NOT_FOUND = "Login attempt failed: User not found -> %s"
+            const val LOGIN_NO_HASH = "Login attempt failed: No password hash found for user -> %s"
+            const val LOGIN_INVALID_PASSWORD = "Login attempt failed: Invalid password for user -> %s"
+            const val LOGIN_ERROR = "Critical database error during login for user: %s"
+
+            const val REFRESH_TOKEN_SAVED = "Refresh token updated successfully for user -> %s"
+            const val REFRESH_TOKEN_SAVE_ERROR = "Failed to save refresh token for user: %s"
+
+            const val REFRESH_TOKEN_VALIDATION_FAILED = "Refresh token validation failed for user -> %s"
+            const val REFRESH_TOKEN_VALIDATION_ERROR = "Critical error validating refresh token for user: %s"
+        }
     }
 }

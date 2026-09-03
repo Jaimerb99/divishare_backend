@@ -4,12 +4,16 @@ import com.jrb.db.factory.DatabaseFactory.dbQuery
 import com.jrb.db.UsersTable
 import com.jrb.models.LoginRequest
 import com.jrb.models.RegisterRequest
+import com.jrb.utils.AppLogger
+import com.jrb.utils.Constants
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.update
 import org.mindrot.jbcrypt.BCrypt
 
 class UserService {
+
+    private val tag = Constants.Logging.USER_SERVICE_TAG
 
     // CREATE: Register a new user safely
     suspend fun registerUser(request: RegisterRequest): Boolean {
@@ -22,6 +26,7 @@ class UserService {
 
                 // If it exists, return false (registration failed)
                 if (existingUser != null) {
+                    AppLogger.warn(tag, Constants.Logging.LogMessages.REGISTRATION_EMAIL_EXISTS.format(request.email))
                     return@dbQuery false
                 }
 
@@ -33,14 +38,17 @@ class UserService {
                     it[email] = request.email
                     it[passwordHash] = hashedPassword
                     it[name] = request.name
-                    it[authProvider] = "LOCAL" // Registered via email/password
+                    it[authProvider] = Constants.Auth.PROVIDER_LOCAL
                 }
 
-                // 4. Return true only if exactly one row was successfully inserted
-                insertStatement.insertedCount > 0
+                val isSuccess = insertStatement.insertedCount > 0
+                if (isSuccess) {
+                    AppLogger.info(tag, Constants.Logging.LogMessages.REGISTRATION_SUCCESS.format(request.email))
+                }
+                isSuccess
             }
         } catch (e: Exception) {
-            // e.g., logger.error("Error inserting user: ${e.message}")
+            AppLogger.error(tag, Constants.Logging.LogMessages.REGISTRATION_ERROR.format(request.email), e)
             false
         }
     }
@@ -56,26 +64,40 @@ class UserService {
 
                 // If user doesn't exist, login fails
                 if (userRow == null) {
+                    AppLogger.warn(tag, Constants.Logging.LogMessages.LOGIN_USER_NOT_FOUND.format(request.email))
                     return@dbQuery false
                 }
 
                 // 2. Extract the stored hash from the database row
-                val storedHash = userRow[UsersTable.passwordHash] ?: return@dbQuery false // If for some reason there's no password (e.g., Google login only), fail
+                val storedHash = userRow[UsersTable.passwordHash] ?: run {
+                    AppLogger.warn(tag, Constants.Logging.LogMessages.LOGIN_NO_HASH.format(request.email))
+                    return@dbQuery false
+                }
 
                 // 3. Verify the plain text password against the hashed one
-                BCrypt.checkpw(request.password, storedHash)
+                val isPasswordValid = BCrypt.checkpw(request.password, storedHash)
+                if (!isPasswordValid) {
+                    AppLogger.warn(tag, Constants.Logging.LogMessages.LOGIN_INVALID_PASSWORD.format(request.email))
+                }
+                isPasswordValid
             }
         } catch (e: Exception) {
+            AppLogger.error(tag, Constants.Logging.LogMessages.LOGIN_ERROR.format(request.email), e)
             false
         }
     }
 
     // UPDATE: Save the refresh token in the database
     suspend fun saveRefreshToken(email: String, token: String) {
-        dbQuery {
-            UsersTable.update({ UsersTable.email eq email }) {
-                it[refreshToken] = token
+        try {
+            dbQuery {
+                UsersTable.update({ UsersTable.email eq email }) {
+                    it[refreshToken] = token
+                }
             }
+            AppLogger.info(tag, Constants.Logging.LogMessages.REFRESH_TOKEN_SAVED.format(email))
+        } catch (e: Exception) {
+            AppLogger.error(tag, Constants.Logging.LogMessages.REFRESH_TOKEN_SAVE_ERROR.format(email), e)
         }
     }
 
@@ -89,9 +111,15 @@ class UserService {
 
                 // Extract the stored token and compare it
                 val storedToken = userRow?.get(UsersTable.refreshToken)
-                storedToken != null && storedToken == token
+                val isValid = storedToken != null && storedToken == token
+
+                if (!isValid) {
+                    AppLogger.warn(tag, Constants.Logging.LogMessages.REFRESH_TOKEN_VALIDATION_FAILED.format(email))
+                }
+                isValid
             }
         } catch (e: Exception) {
+            AppLogger.error(tag, Constants.Logging.LogMessages.REFRESH_TOKEN_VALIDATION_ERROR.format(email), e)
             false
         }
     }
