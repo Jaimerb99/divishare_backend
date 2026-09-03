@@ -2,7 +2,7 @@ package com.jrb.models
 
 import kotlinx.serialization.Serializable
 
-// Lo que el cliente envía
+// What client sends
 @Serializable
 data class RegisterRequest(
     val email: String,
@@ -10,9 +10,24 @@ data class RegisterRequest(
     val password: String
 )
 
-// Lo que el servidor responde siempre (éxito o error)
+// Server response
 @Serializable
 data class GenericResponse(
     val success: Boolean,
     val message: String
+)
+
+// Request sent by the client to log in
+@Serializable
+data class LoginRequest(
+    val email: String,
+    val password: String
+)
+
+// Response sent by the server upon successful login (will include JWT token later)
+@Serializable
+data class AuthResponse(
+    val success: Boolean,
+    val message: String,
+    val token: String? = null
 )

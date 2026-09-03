@@ -1,6 +1,6 @@
 package com.jrb
 
-import com.jrb.db.Factory.DatabaseFactory
+import com.jrb.db.factory.DatabaseFactory
 import com.jrb.plugins.configureRouting
 import com.jrb.plugins.configureSecurity
 import com.jrb.plugins.configureSerialization

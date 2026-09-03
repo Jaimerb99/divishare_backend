@@ -31,6 +31,7 @@ dependencies {
     implementation(libs.exposed.java.time)
     implementation(libs.hikaricp)
     implementation(libs.postgresql)
+    implementation(libs.jbcrypt)
 
     // Logs
     implementation(libs.logback.classic)
