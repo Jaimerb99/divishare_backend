@@ -26,6 +26,7 @@ object Constants {
         const val LOGIN_ERROR_PERMANENTLY_DELETED = "login_error_permanently_deleted"
         const val LOGIN_ERROR_REACTIVATE = "login_error_reactivate"
         const val LOGIN_ERROR_WRONG_PROVIDER = "login_error_wrong_provider"
+        const val CURRENCY_UNAVAILABLE = "currency_unavailable"
     }
 
     // Configuration for localization and language defaults
@@ -101,6 +102,11 @@ object Constants {
             const val LOGIN_USER_PERMANENTLY_DELETED = "Login attempt failed: Account permanently deleted -> %s"
             const val LOGIN_REACTIVATION_REQUIRED = "Login blocked: User must reset password to reactivate -> %s"
             const val LOGIN_WRONG_PROVIDER = "Login attempt failed: User must use %s -> %s"
+
+            const val CURRENCY_FETCH_START = "Fetching latest currency rates from external API..."
+            const val CURRENCY_FETCH_SUCCESS = "Successfully updated %d exchange rates."
+            const val CURRENCY_FETCH_FAILED_HTTP = "Failed to fetch rates. HTTP Status: %d"
+            const val CURRENCY_FETCH_EXCEPTION = "Exception while fetching currency rates"
         }
     }
 
@@ -118,5 +124,9 @@ object Constants {
         const val PORT = "587"
         const val SENDER = "divishareapp@gmail.com"
         const val PASSWORD = "sehuziombgoaamjj" // Fixme Only for develop -----------
+    }
+
+    object ExternalApis {
+        const val EXCHANGE_RATES_URL = "https://open.er-api.com/v6/latest/USD"
     }
 }

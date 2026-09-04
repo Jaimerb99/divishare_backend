@@ -1,6 +1,7 @@
 package com.jrb.plugins
 
 import com.jrb.models.GenericResponse
+import com.jrb.routes.currencyRoutes
 import com.jrb.routes.userRoutes
 import com.jrb.services.UserService
 import com.jrb.utils.Constants
@@ -47,6 +48,7 @@ fun Application.configureRouting() {
     // Route register
     routing {
         userRoutes(userService)
+        currencyRoutes()
         // We have to add next routes groupRoutes(), expenseRoutes()...
     }
 }

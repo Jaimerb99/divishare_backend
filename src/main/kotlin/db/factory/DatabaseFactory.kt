@@ -1,5 +1,6 @@
 package com.jrb.db.factory
 
+import com.jrb.db.ExchangeRatesTable
 import com.jrb.db.ExpenseSplitsTable
 import com.jrb.db.ExpensesTable
 import com.jrb.db.GroupMembersTable
@@ -29,21 +30,22 @@ object DatabaseFactory {
         Database.connect(HikariDataSource(config))
 
         transaction {
-            /*SchemaUtils.drop(
+            SchemaUtils.drop(
                 UsersTable,
                 GroupsTable,
                 GroupMembersTable,
                 ExpensesTable,
                 ExpenseSplitsTable,
                 RefreshTokensTable
-            )*/
+            )
             SchemaUtils.createMissingTablesAndColumns(
                 UsersTable,
                 GroupsTable,
                 GroupMembersTable,
                 ExpensesTable,
                 ExpenseSplitsTable,
-                RefreshTokensTable
+                RefreshTokensTable,
+                ExchangeRatesTable
             )
         }
     }

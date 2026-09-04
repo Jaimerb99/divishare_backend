@@ -4,7 +4,7 @@ import org.jetbrains.exposed.sql.Table
 
 object UsersTable : Table("users") {
     val id = uuid("id").autoGenerate()
-    val email = varchar("email", 128)
+    val email = varchar("email", 128).uniqueIndex()
     val passwordHash = varchar("password_hash", 128).nullable()
     val name = varchar("name", 128)
     val authProvider = varchar("auth_provider", 50)
@@ -13,7 +13,7 @@ object UsersTable : Table("users") {
     val isActive = bool("is_active").default(true)
     val deletedAt = long("deleted_at").nullable()
 
-    override val primaryKey = PrimaryKey(email)
+    override val primaryKey = PrimaryKey(id)
 }
 
 object RefreshTokensTable : Table("refresh_tokens") {
