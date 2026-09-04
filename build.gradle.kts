@@ -25,13 +25,13 @@ dependencies {
     implementation(ktorLibs.server.netty)
     implementation(libs.ktor.server.status.pages)
 
-    // Base de datos: Exposed, JDBC, Hikari y driver de Postgres
     implementation(libs.exposed.core)
     implementation(libs.exposed.jdbc)
     implementation(libs.exposed.java.time)
     implementation(libs.hikaricp)
     implementation(libs.postgresql)
     implementation(libs.jbcrypt)
+    implementation(libs.javax.mail)
 
     // Logs
     implementation(libs.logback.classic)
