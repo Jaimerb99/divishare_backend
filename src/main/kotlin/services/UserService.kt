@@ -278,4 +278,16 @@ class UserService {
             false
         }
     }
+
+    suspend fun getUserIdByEmail(email: String): String? {
+        return try {
+            dbQuery {
+                val userRow = UsersTable.select { UsersTable.email eq email }.singleOrNull()
+                userRow?.get(UsersTable.id)?.toString()
+            }
+        } catch (e: Exception) {
+            AppLogger.error(tag, Constants.Logging.LogMessages.LOGIN_USER_NOT_FOUND.format(email), e)
+            null
+        }
+    }
 }

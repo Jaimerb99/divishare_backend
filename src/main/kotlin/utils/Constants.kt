@@ -2,7 +2,6 @@ package com.jrb.utils
 
 object Constants {
 
-    // Keys that match exactly the ones in your .properties files
     object Messages {
         const val REGISTER_SUCCESS = "register_success"
         const val REGISTER_CONFLICT = "register_conflict"
@@ -27,9 +26,27 @@ object Constants {
         const val LOGIN_ERROR_REACTIVATE = "login_error_reactivate"
         const val LOGIN_ERROR_WRONG_PROVIDER = "login_error_wrong_provider"
         const val CURRENCY_UNAVAILABLE = "currency_unavailable"
+        const val INVALID_USER_ID = "invalid_user_id"
+        const val INVALID_REQUEST_BODY = "invalid_request_body"
+        const val GROUP_CREATION_FAILED = "group_creation_failed"
+        const val GROUP_FETCH_FAILED = "group_fetch_failed"
+        const val EXPENSE_CREATION_FAILED = "expense_creation_failed"
+        const val INVALID_GROUP_ID = "invalid_group_id"
+        const val EXPENSE_FETCH_FAILED = "expense_fetch_failed"
+        const val SETTLEMENT_CREATION_FAILED = "settlement_creation_failed"
+        const val SETTLEMENT_FETCH_FAILED = "settlement_fetch_failed"
+        const val ACTIVITY_LOG_FETCH_FAILED = "activity_log_fetch_failed"
+        const val MEMBER_ADD_FAILED = "member_add_failed"
+        const val MEMBER_REMOVE_FAILED = "member_remove_failed"
+        const val EXPENSE_NOT_FOUND = "expense_not_found"
+        const val EXPENSE_UPDATE_FAILED = "expense_update_failed"
+        const val EXPENSE_DELETE_FAILED = "expense_delete_failed"
+
+        const val GROUP_ALREADY_EXISTS = "group_already_exists"
+        const val EXPENSE_ALREADY_EXISTS = "expense_already_exists"
+        const val SETTLEMENT_ALREADY_EXISTS = "settlement_already_exists"
     }
 
-    // Configuration for localization and language defaults
     object Localization {
         const val DEFAULT_LANG_CODE = "en"
         const val SPANISH_LANG_PREFIX = "es"
@@ -38,14 +55,12 @@ object Constants {
 
     object User {
         const val GRACE_PERIOD_DAYS = 30
-        const val DELETED_NAME = "Deleted User" // Constants not used for future cron job
+        const val DELETED_NAME = "Deleted User"
         const val DELETED_EMAIL_DOMAIN = "@deleted.divishare.local"
         const val DELETED_EMAIL_PREFIX = "deleted_"
     }
 
     object Security {
-        // In a real production app, NEVER hardcode the secret here. Use environment variables.
-        // For development, this is fine.
         const val JWT_SECRET = "divishare-super-secret-key-2026"
         const val JWT_ISSUER = "http://localhost:8080/"
         const val JWT_AUDIENCE = "divishare-users"
@@ -54,6 +69,7 @@ object Constants {
         const val CLAIM_EMAIL = "email"
         const val PIN_MIN = 100000
         const val PIN_MAX = 999999
+        const val CLAIM_USER_ID = "userId"
     }
 
     // Auth related constants
@@ -66,6 +82,10 @@ object Constants {
         const val GLOBAL_TAG = "DivishareBackend"
         const val USER_SERVICE_TAG = "UserService"
         const val EMAIL_SERVICE_TAG = "EmailService"
+        const val GROUP_SERVICE_TAG = "GroupService"
+        const val EXPENSE_SERVICE_TAG = "ExpenseService"
+        const val SETTLEMENT_SERVICE_TAG = "SettlementService"
+        const val ACTIVITY_LOG_SERVICE_TAG = "ActivityLogService"
 
         object LogMessages {
             const val REGISTRATION_EMAIL_EXISTS = "Registration attempt failed: Email already exists -> %s"
@@ -107,6 +127,37 @@ object Constants {
             const val CURRENCY_FETCH_SUCCESS = "Successfully updated %d exchange rates."
             const val CURRENCY_FETCH_FAILED_HTTP = "Failed to fetch rates. HTTP Status: %d"
             const val CURRENCY_FETCH_EXCEPTION = "Exception while fetching currency rates"
+
+            const val GROUP_CREATE_SUCCESS = "Group created successfully with ID: %s"
+            const val GROUP_CREATE_ERROR = "Error creating group with ID: %s"
+            const val GROUP_FETCH_ERROR = "Error fetching groups for user ID: %s"
+
+            const val EXPENSE_CREATE_SUCCESS = "Expense created successfully with ID: %s"
+            const val EXPENSE_CREATE_ERROR = "Error creating expense with ID: %s"
+            const val EXPENSE_FETCH_ERROR = "Error fetching expenses for group ID: %s"
+            const val EXPENSE_UPDATE_SUCCESS = "Expense updated successfully: %s"
+            const val EXPENSE_UPDATE_ERROR = "Error updating expense: %s"
+            const val EXPENSE_DELETE_SUCCESS = "Expense soft-deleted successfully: %s"
+            const val EXPENSE_DELETE_ERROR = "Error deleting expense: %s"
+            const val EXPENSE_NOT_FOUND_LOG = "Expense not found: %s"
+
+            const val UNAUTHORIZED_GROUP_ACCESS = "Security: User %s attempted to access group %s without being a member"
+
+            const val SETTLEMENT_CREATE_SUCCESS = "Settlement created successfully with ID: %s"
+            const val SETTLEMENT_CREATE_ERROR = "Error creating settlement with ID: %s"
+            const val SETTLEMENT_FETCH_ERROR = "Error fetching settlements for group ID: %s"
+            const val SETTLEMENT_UPDATE_SUCCESS = "Settlement updated successfully: %s"
+            const val SETTLEMENT_UPDATE_ERROR = "Error updating settlement: %s"
+            const val SETTLEMENT_DELETE_SUCCESS = "Settlement soft-deleted successfully: %s"
+            const val SETTLEMENT_DELETE_ERROR = "Error deleting settlement: %s"
+            const val SETTLEMENT_NOT_FOUND_LOG = "Settlement not found: %s"
+
+            const val ACTIVITY_LOG_FETCH_ERROR = "Error fetching activity logs for group ID: %s"
+
+            const val MEMBER_ADD_SUCCESS = "Members added successfully to group: %s"
+            const val MEMBER_ADD_ERROR = "Error adding members to group: %s"
+            const val MEMBER_REMOVE_SUCCESS = "Member %s removed from group: %s"
+            const val MEMBER_REMOVE_ERROR = "Error removing member %s from group: %s"
         }
     }
 
@@ -128,5 +179,22 @@ object Constants {
 
     object ExternalApis {
         const val EXCHANGE_RATES_URL = "https://open.er-api.com/v6/latest/USD"
+    }
+
+    object Audit {
+        const val ENTITY_GROUP = "GROUP"
+        const val ENTITY_MEMBER = "MEMBER"
+        const val ENTITY_EXPENSE = "EXPENSE"
+        const val ENTITY_SETTLEMENT = "SETTLEMENT"
+
+        const val ACTION_CREATE = "CREATE"
+        const val ACTION_UPDATE = "UPDATE"
+        const val ACTION_DELETE = "DELETE"
+        const val ACTION_JOIN = "JOIN"
+        const val ACTION_LEAVE = "LEAVE"
+    }
+
+    object Exceptions {
+        const val UNAUTHORIZED_GROUP_ACCESS = "Unauthorized group access"
     }
 }

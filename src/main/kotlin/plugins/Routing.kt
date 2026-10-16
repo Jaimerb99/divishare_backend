@@ -1,10 +1,19 @@
 package com.jrb.plugins
 
 import com.jrb.models.GenericResponse
+import com.jrb.routes.activityLogRoutes
 import com.jrb.routes.currencyRoutes
+import com.jrb.routes.expenseRoutes
+import com.jrb.routes.groupRoutes
+import com.jrb.routes.settlementRoutes
 import com.jrb.routes.userRoutes
+import com.jrb.services.ActivityLogService
+import com.jrb.services.ExpenseService
+import com.jrb.services.GroupService
+import com.jrb.services.SettlementService
 import com.jrb.services.UserService
 import com.jrb.utils.Constants
+import com.jrb.utils.DuplicateEntityException
 import com.jrb.utils.Messages
 import com.jrb.utils.getLanguage
 import io.ktor.http.*
@@ -15,8 +24,11 @@ import io.ktor.server.routing.*
 
 fun Application.configureRouting() {
     val userService = UserService()
+    val expenseService = ExpenseService()
+    val groupService = GroupService()
+    val settlementService = SettlementService()
+    val activityLogService = ActivityLogService()
 
-    // Error Handling
     install(StatusPages) {
 
         exception<io.ktor.server.plugins.BadRequestException> { call, _ ->
@@ -30,10 +42,20 @@ fun Application.configureRouting() {
             )
         }
 
-        // Any other unexpected server error
+        exception<DuplicateEntityException> { call, cause ->
+            val lang = call.getLanguage()
+            call.respond(
+                HttpStatusCode.Conflict,
+                GenericResponse(
+                    success = false,
+                    message = Messages.get(cause.errorCode.name, lang)
+                )
+            )
+        }
+
         exception<Throwable> { call, cause ->
             val lang = call.getLanguage()
-            val errorMessage = cause.localizedMessage ?: "Unknown"
+            val errorMessage = cause.localizedMessage ?: ""
 
             call.respond(
                 HttpStatusCode.InternalServerError,
@@ -45,10 +67,12 @@ fun Application.configureRouting() {
         }
     }
 
-    // Route register
     routing {
         userRoutes(userService)
         currencyRoutes()
-        // We have to add next routes groupRoutes(), expenseRoutes()...
+        expenseRoutes(expenseService)
+        groupRoutes(groupService)
+        settlementRoutes(settlementService)
+        activityLogRoutes(activityLogService)
     }
 }

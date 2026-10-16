@@ -9,11 +9,12 @@ import java.util.Date
 object TokenManager {
 
     // Generates a short-lived JWT token (Access Token)
-    fun generateToken(email: String): String {
+    fun generateToken(email: String, userId: String): String {
         return JWT.create()
             .withAudience(Constants.Security.JWT_AUDIENCE)
             .withIssuer(Constants.Security.JWT_ISSUER)
-            .withClaim("email", email)
+            .withClaim(Constants.Security.CLAIM_EMAIL, email)
+            .withClaim(Constants.Security.CLAIM_USER_ID, userId)
             .withExpiresAt(Date(System.currentTimeMillis() + Constants.Security.JWT_EXPIRATION_MS))
             .sign(Algorithm.HMAC256(Constants.Security.JWT_SECRET))
     }

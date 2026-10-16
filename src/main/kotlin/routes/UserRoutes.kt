@@ -54,9 +54,8 @@ fun Route.userRoutes(userService: UserService) {
 
             when (val result = userService.loginUser(request)) {
                 is LoginResult.Success -> {
-                    val accessToken = TokenManager.generateToken(request.email)
+                    val accessToken = TokenManager.generateToken(request.email, result.userId)
                     val refreshToken = TokenManager.generateRefreshToken()
-
                     userService.saveRefreshToken(request.email, request.deviceId, refreshToken)
 
                     call.respond(
@@ -116,20 +115,32 @@ fun Route.userRoutes(userService: UserService) {
             val isValid = userService.validateRefreshToken(request.email, request.deviceId, request.refreshToken)
 
             if (isValid) {
-                val newAccessToken = TokenManager.generateToken(request.email)
-                val newRefreshToken = TokenManager.generateRefreshToken()
+                val userId = userService.getUserIdByEmail(request.email)
 
-                userService.saveRefreshToken(request.email, request.deviceId, newRefreshToken)
+                if (userId != null) {
+                    val newAccessToken = TokenManager.generateToken(request.email, userId)
+                    val newRefreshToken = TokenManager.generateRefreshToken()
 
-                call.respond(
-                    HttpStatusCode.OK,
-                    AuthResponse(
-                        success = true,
-                        message = Messages.get(Constants.Messages.REFRESH_SUCCESS, lang),
-                        token = newAccessToken,
-                        refreshToken = newRefreshToken
+                    userService.saveRefreshToken(request.email, request.deviceId, newRefreshToken)
+
+                    call.respond(
+                        HttpStatusCode.OK,
+                        AuthResponse(
+                            success = true,
+                            message = Messages.get(Constants.Messages.REFRESH_SUCCESS, lang),
+                            token = newAccessToken,
+                            refreshToken = newRefreshToken
+                        )
                     )
-                )
+                } else {
+                    call.respond(
+                        HttpStatusCode.Unauthorized,
+                        AuthResponse(
+                            success = false,
+                            message = Messages.get(Constants.Messages.UNAUTHORIZED_ACCESS, lang)
+                        )
+                    )
+                }
             } else {
                 call.respond(
                     HttpStatusCode.Unauthorized,
