@@ -7,6 +7,7 @@ postgresql = "42.7.13"
 hikaricp = "5.1.0"
 jbcrypt = "0.4"
 javax_mail = "1.6.2"
+cloudinary = "1.36.0"
 
 [libraries]
 exposed-core = { module = "org.jetbrains.exposed:exposed-core", version.ref = "exposed" }
@@ -18,6 +19,7 @@ postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql" 
 ktor-server-status-pages = { module = "io.ktor:ktor-server-status-pages", version.ref = "ktor" }
 jbcrypt = { module = "org.mindrot:jbcrypt", version.ref = "jbcrypt" }
 javax_mail = { module = "com.sun.mail:javax.mail", version.ref = "javax_mail" }
+cloudinary = { module = "com.cloudinary:cloudinary-http44", version.ref = "cloudinary" }
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }

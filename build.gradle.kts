@@ -38,4 +38,7 @@ dependencies {
 
     testImplementation(kotlin("test"))
     testImplementation(ktorLibs.server.testHost)
+
+    // Cloudinary
+    implementation(libs.cloudinary)
 }

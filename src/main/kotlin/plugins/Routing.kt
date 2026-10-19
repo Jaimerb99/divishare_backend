@@ -5,11 +5,13 @@ import com.jrb.routes.activityLogRoutes
 import com.jrb.routes.currencyRoutes
 import com.jrb.routes.expenseRoutes
 import com.jrb.routes.groupRoutes
+import com.jrb.routes.mediaRoutes
 import com.jrb.routes.settlementRoutes
 import com.jrb.routes.userRoutes
 import com.jrb.services.ActivityLogService
 import com.jrb.services.ExpenseService
 import com.jrb.services.GroupService
+import com.jrb.services.MediaService
 import com.jrb.services.SettlementService
 import com.jrb.services.UserService
 import com.jrb.utils.Constants
@@ -28,6 +30,7 @@ fun Application.configureRouting() {
     val groupService = GroupService()
     val settlementService = SettlementService()
     val activityLogService = ActivityLogService()
+    val mediaService = MediaService()
 
     install(StatusPages) {
 
@@ -74,5 +77,6 @@ fun Application.configureRouting() {
         groupRoutes(groupService)
         settlementRoutes(settlementService)
         activityLogRoutes(activityLogService)
+        mediaRoutes(mediaService)
     }
 }

@@ -45,6 +45,8 @@ object Constants {
         const val GROUP_ALREADY_EXISTS = "group_already_exists"
         const val EXPENSE_ALREADY_EXISTS = "expense_already_exists"
         const val SETTLEMENT_ALREADY_EXISTS = "settlement_already_exists"
+        const val IMAGE_UPLOAD_SUCCESS = "image_upload_success"
+        const val IMAGE_UPLOAD_ERROR = "image_upload_error"
     }
 
     object Localization {
@@ -196,5 +198,14 @@ object Constants {
 
     object Exceptions {
         const val UNAUTHORIZED_GROUP_ACCESS = "Unauthorized group access"
+    }
+
+    object CloudinaryConfig {
+        const val CLOUD_NAME = "upkuolg4"
+        const val API_KEY = "513385112335541"
+        const val API_SECRET = "K73HqX5FaJ0eVFz0S5ZKkpkkly4"
+
+        const val FOLDER_RECEIPTS = "receipts"
+        const val FOLDER_AVATARS = "avatars"
     }
 }
