@@ -38,9 +38,6 @@ class ExpenseService {
                 val targetGroupId = UUID.fromString(request.groupId)
                 val payerId = UUID.fromString(request.paidById)
 
-                // Authorization first, before any lookup that could reveal whether an id already exists
-                SecurityUtils.ensureUserIsGroupMember(authenticatedUserId, targetGroupId, tag)
-
                 // Verify if the expense ID already exists
                 val exists = ExpensesTable.select { ExpensesTable.id eq newExpenseId }.count() > 0
                 if (exists) {
@@ -96,8 +93,6 @@ class ExpenseService {
                 )
             }
         } catch (e: DuplicateEntityException) {
-            throw e
-        } catch (e: SecurityException) {
             throw e
         } catch (e: Exception) {
             AppLogger.error(tag, Constants.Logging.LogMessages.EXPENSE_CREATE_ERROR.format(request.id), e)
