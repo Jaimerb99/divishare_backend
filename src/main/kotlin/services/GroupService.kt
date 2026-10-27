@@ -31,6 +31,8 @@ class GroupService {
                 val now = System.currentTimeMillis()
                 val newGroupId = UUID.fromString(request.id)
 
+                //SecurityUtils.ensureUserIsGroupMember(authenticatedUserId, newGroupId, tag)
+
                 // Verify if group ID already exists
                 val exists = GroupsTable.select { GroupsTable.id eq newGroupId }.count() > 0
                 if (exists) {

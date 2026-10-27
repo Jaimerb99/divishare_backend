@@ -38,7 +38,13 @@ dependencies {
 
     testImplementation(kotlin("test"))
     testImplementation(ktorLibs.server.testHost)
+    testImplementation(libs.bundles.testing)
 
     // Cloudinary
     implementation(libs.cloudinary)
+
+}
+
+tasks.test {
+    useJUnitPlatform()
 }

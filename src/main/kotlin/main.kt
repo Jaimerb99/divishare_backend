@@ -12,10 +12,17 @@ fun main(args: Array<String>): Unit = EngineMain.main(args)
 
 fun Application.module() {
     // Init database
-    DatabaseFactory.init()
+    DatabaseFactory.init(environment.config)
 
-    // Workers
-    CurrencyWorker.start()
+    // Workers (can be disabled by config, e.g. in tests)
+    val workersEnabled = environment.config
+        .propertyOrNull("workers.enabled")
+        ?.getString()
+        ?.toBoolean() ?: true
+    if (workersEnabled) {
+        CurrencyWorker.start()
+    }
+
 
     // Load the rest of the conf ktor generated
     configureSerialization()

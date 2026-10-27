@@ -56,6 +56,16 @@ fun Application.configureRouting() {
             )
         }
 
+        exception<SecurityException> { call, _ ->
+            call.respond(
+                HttpStatusCode.Forbidden,
+                GenericResponse(
+                    false,
+                    Messages.get(Constants.Messages.UNAUTHORIZED_ACCESS, call.getLanguage())
+                )
+            )
+        }
+
         exception<Throwable> { call, cause ->
             val lang = call.getLanguage()
             val errorMessage = cause.localizedMessage ?: ""
@@ -78,5 +88,6 @@ fun Application.configureRouting() {
         settlementRoutes(settlementService)
         activityLogRoutes(activityLogService)
         mediaRoutes(mediaService)
+        get("/health") { call.respond(HttpStatusCode.OK, "OK") }
     }
 }

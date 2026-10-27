@@ -8,6 +8,8 @@ hikaricp = "5.1.0"
 jbcrypt = "0.4"
 javax_mail = "1.6.2"
 cloudinary = "1.36.0"
+mockk = "1.14.6"
+testcontainers = "2.0.2"
 
 [libraries]
 exposed-core = { module = "org.jetbrains.exposed:exposed-core", version.ref = "exposed" }
@@ -20,6 +22,24 @@ ktor-server-status-pages = { module = "io.ktor:ktor-server-status-pages", versio
 jbcrypt = { module = "org.mindrot:jbcrypt", version.ref = "jbcrypt" }
 javax_mail = { module = "com.sun.mail:javax.mail", version.ref = "javax_mail" }
 cloudinary = { module = "com.cloudinary:cloudinary-http44", version.ref = "cloudinary" }
+
+# --- testing ---
+ktor-server-test-host = { module = "io.ktor:ktor-server-test-host", version.ref = "ktor" }
+ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
+ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
+kotlin-test-junit5 = { module = "org.jetbrains.kotlin:kotlin-test-junit5", version.ref = "kotlin" }
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
+testcontainers-postgresql = { module = "org.testcontainers:testcontainers-postgresql", version.ref = "testcontainers" }
+
+[bundles]
+testing = [
+    "ktor-server-test-host",
+    "ktor-client-content-negotiation",
+    "ktor-serialization-kotlinx-json",
+    "kotlin-test-junit5",
+    "mockk",
+    "testcontainers-postgresql",
+]
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
